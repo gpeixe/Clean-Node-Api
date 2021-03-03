@@ -1,2 +1,2 @@
 import app from './config/app'
-app.listen(3000, () => console.log('Running at 3000'))
+app.listen(80, () => console.log('Running at 80'))
