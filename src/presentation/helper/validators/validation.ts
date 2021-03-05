@@ -1,3 +1,3 @@
-export interface Validator {
+export interface Validation {
   validate (input: any): Error
 }

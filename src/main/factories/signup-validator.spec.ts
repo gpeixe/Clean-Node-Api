@@ -1,19 +1,31 @@
-import { ValidatorComposite } from '../../presentation/helper/validators/validator-composite'
-import { RequiredFieldValidator } from '../../presentation/helper/validators/required-field-validator'
+import { ValidationComposite } from '../../presentation/helper/validators/validation-composite'
+import { RequiredFieldValidation } from '../../presentation/helper/validators/required-field-validation'
 import { makeSignUpValidator } from './signup-validatior'
-import { Validator } from '../../presentation/helper/validators/validator'
-import { CompareFieldsValidator } from '../../presentation/helper/validators/compare-fields-validator'
+import { Validation } from '../../presentation/helper/validators/validation'
+import { CompareFieldsValidation } from '../../presentation/helper/validators/compare-fields-validation'
+import { EmailValidation } from '../../presentation/helper/validators/email-validation'
+import { EmailValidator } from '../../presentation/protocols'
 
-jest.mock('../../presentation/helper/validators/validator-composite')
+jest.mock('../../presentation/helper/validators/validation-composite')
+
+const makeEmailValidator = (): EmailValidator => {
+  class EmailValidatorStub implements EmailValidator {
+    isValid (email: string): boolean {
+      return true
+    }
+  }
+  return new EmailValidatorStub()
+}
 
 describe('SignUpValidator Factory', () => {
   test('Should call ValidatorComposite with all Validators', () => {
     makeSignUpValidator()
-    const validations: Validator[] = []
+    const validations: Validation[] = []
     for (const field of ['name', 'email', 'password', 'passwordConfirmation']) {
-      validations.push(new RequiredFieldValidator(field))
+      validations.push(new RequiredFieldValidation(field))
     }
-    validations.push(new CompareFieldsValidator('password', 'passwordConfirmation'))
-    expect(ValidatorComposite).toHaveBeenCalledWith(validations)
+    validations.push(new CompareFieldsValidation('password', 'passwordConfirmation'))
+    validations.push(new EmailValidation('email', makeEmailValidator()))
+    expect(ValidationComposite).toHaveBeenCalledWith(validations)
   })
 })
