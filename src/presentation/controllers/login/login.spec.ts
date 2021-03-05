@@ -1,8 +1,7 @@
 import { InvalidParamError, MissingParamError, ServerError } from '../../errors'
 import { badRequest, serverError, unauthorized } from '../../helper/http-helper'
-import { EmailValidator, HttpRequest } from '../../protocols'
+import { EmailValidator, HttpRequest, Authentication } from '../login/login-protocols'
 import { LoginController } from './login'
-import { Authentication } from '../../../domain/useCases/authentication'
 
 describe('Login Controller', () => {
   const makeSut = (): SutTypes => {
