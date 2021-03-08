@@ -1,3 +1,4 @@
+import { AuthenticationModel } from '../../../domain/useCases/authentication'
 import { ServerError } from '../../errors'
 import { badRequest, serverError, unauthorized, ok } from '../../helper/http/http-helper'
 import { HttpRequest, Authentication, Validation } from '../login/login-protocols'
@@ -30,7 +31,7 @@ const makeValidation = (): Validation => {
 
 const makeAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
-    async auth (email: string, password: string): Promise<string> {
+    async auth (authentication: AuthenticationModel): Promise<string> {
       return await new Promise(resolve => resolve('any_token'))
     }
   }
@@ -70,7 +71,9 @@ describe('Login Controller', () => {
     const authSpy = jest.spyOn(authenticationStub, 'auth')
     const httpRequest = makeFakeRequest()
     await sut.handle(httpRequest)
-    expect(authSpy).toHaveBeenCalledWith(httpRequest.body.email, httpRequest.body.password)
+    const { email, password } = httpRequest.body
+    const auth = { email, password }
+    expect(authSpy).toHaveBeenCalledWith(auth)
   })
 
   test('Should return 401 if Authentication fails', async () => {
