@@ -1,5 +1,5 @@
 import { ServerError } from '../../errors'
-import { badRequest, serverError, unauthorized, ok } from '../../helper/http-helper'
+import { badRequest, serverError, unauthorized, ok } from '../../helper/http/http-helper'
 import { HttpRequest, Authentication, Validation } from '../login/login-protocols'
 import { LoginController } from './login'
 
