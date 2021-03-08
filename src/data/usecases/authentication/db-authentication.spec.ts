@@ -86,12 +86,14 @@ describe('DbAuthentication Use Case', () => {
     await sut.auth(auth)
     expect(loadSpy).toHaveBeenCalledWith(auth.email)
   })
+
   test('Should throw if LoadAccountByEmailRepository throws', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut()
     jest.spyOn(loadAccountByEmailRepositoryStub, 'load').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
     const promise = sut.auth(makeFakeAccount())
     await expect(promise).rejects.toThrow()
   })
+
   test('Should call HashComparer with correct values', async () => {
     const { sut, hashComparerStub } = makeSut()
     const compareSpy = jest.spyOn(hashComparerStub, 'compare')
@@ -99,6 +101,7 @@ describe('DbAuthentication Use Case', () => {
     await sut.auth(auth)
     expect(compareSpy).toHaveBeenCalledWith(auth.password, 'hashed_password')
   })
+
   test('Should returns null if HashComparer returns false', async () => {
     const { sut, hashComparerStub } = makeSut()
     jest.spyOn(hashComparerStub, 'compare').mockReturnValueOnce(new Promise(resolve => resolve(false)))
@@ -106,6 +109,7 @@ describe('DbAuthentication Use Case', () => {
     const accessToken = await sut.auth(auth)
     expect(accessToken).toBeNull()
   })
+
   test('Should call TokenGenerator with correct id', async () => {
     const { sut, tokenGeneratorStub } = makeSut()
     const generateSpy = jest.spyOn(tokenGeneratorStub, 'generate')
@@ -113,22 +117,32 @@ describe('DbAuthentication Use Case', () => {
     await sut.auth(makeFakeAuthentication())
     expect(generateSpy).toHaveBeenCalledWith(account.id)
   })
+
   test('Should throws if TokenGenerator throws', async () => {
     const { sut, tokenGeneratorStub } = makeSut()
     jest.spyOn(tokenGeneratorStub, 'generate').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
     const promise = sut.auth(makeFakeAuthentication())
     await expect(promise).rejects.toThrow()
   })
+
   test('Should returns a token on success', async () => {
     const { sut } = makeSut()
     const accessToken = await sut.auth(makeFakeAuthentication())
     expect(accessToken).toBe('any_token')
   })
+
   test('Should call UpdateAccessTokenRepository with correct values', async () => {
     const { sut, updateAccessTokenRepositoryStub } = makeSut()
     const updateSpy = jest.spyOn(updateAccessTokenRepositoryStub, 'update')
     const account = makeFakeAccount()
     await sut.auth(account)
     expect(updateSpy).toHaveBeenCalledWith(account.id, 'any_token')
+  })
+
+  test('Should throw if UpdateAccessTokenRepository throws', async () => {
+    const { sut, updateAccessTokenRepositoryStub } = makeSut()
+    jest.spyOn(updateAccessTokenRepositoryStub, 'update').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+    const promise = sut.auth(makeFakeAccount())
+    await expect(promise).rejects.toThrow()
   })
 })
