@@ -40,4 +40,12 @@ describe('Required Field Validation', () => {
     const error = sut.validate({ field: 'any_field' })
     expect(error).toEqual(new Error())
   })
+
+  test('Should not return if validation succeeds', () => {
+    const { sut, validationStubs } = makeSut()
+    jest.spyOn(validationStubs[0], 'validate')
+    jest.spyOn(validationStubs[1], 'validate')
+    const error = sut.validate({ field: 'any_field' })
+    expect(error).toBeFalsy()
+  })
 })
