@@ -1,8 +1,8 @@
 import { AuthenticationModel } from '../../../domain/useCases/authentication'
 import { ServerError } from '../../errors'
-import { badRequest, serverError, unauthorized, ok } from '../../helper/http/http-helper'
-import { HttpRequest, Authentication, Validation } from '../login/login-protocols'
-import { LoginController } from './login'
+import { badRequest, serverError, unauthorized, ok } from '../../helpers/http/http-helper'
+import { HttpRequest, Authentication, Validation } from './login-controller-protocols'
+import { LoginController } from './login-controller'
 
 const makeSut = (): SutTypes => {
   const authenticationStub = makeAuthentication()
