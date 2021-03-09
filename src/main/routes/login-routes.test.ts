@@ -14,8 +14,8 @@ afterAll(async () => {
   await MongoHelper.disconnect()
 })
 
-describe('SignUp Routes', () => {
-  test('Should return an account on success', async () => {
+describe('POST /signup', () => {
+  test('Should return 200 on signup', async () => {
     await request(app)
       .post('/api/signup')
       .send({
