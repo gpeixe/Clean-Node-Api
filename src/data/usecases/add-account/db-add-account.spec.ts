@@ -88,4 +88,11 @@ describe('DbAddAccount Use Case', () => {
     const account = await sut.add(accountData)
     expect(account).toEqual(makeFakeAccount())
   })
+
+  test('Should return null if addAccount returns null', async () => {
+    const { sut, addAccountRepositoryStub } = makeSut()
+    jest.spyOn(addAccountRepositoryStub, 'add').mockReturnValueOnce(null)
+    const account = await sut.add(makeFakeAddAccount())
+    expect(account).toBeNull()
+  })
 })
