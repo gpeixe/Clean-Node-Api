@@ -30,10 +30,6 @@ export class AccountMongoRepository implements AddAccountRepository, LoadAccount
 
   async add (accountData: AddAccountModel): Promise<AccountModel> {
     const accountCollection = await this.getAccountCollection()
-    const accountExists = await this.loadByEmail(accountData.email)
-    if (accountExists) {
-      return null
-    }
     const result = await accountCollection.insertOne(accountData)
     const account = result.ops[0]
     return MongoHelper.map(account)

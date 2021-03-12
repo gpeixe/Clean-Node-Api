@@ -69,11 +69,4 @@ describe('Account MongoDb Repository', () => {
     expect(account).toBeTruthy()
     expect(account.accessToken).toBe('any_token')
   })
-
-  test('Should return null if the email provided is in use', async () => {
-    const sut = makeSut()
-    await accountCollection.insertOne(makeAddAccount())
-    const account = await sut.add(makeAddAccount())
-    expect(account).toBeNull()
-  })
 })
