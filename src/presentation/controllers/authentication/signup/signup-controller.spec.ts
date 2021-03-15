@@ -1,39 +1,27 @@
 import { SignUpController } from './signup-controller'
-import { EmailInUseError, ServerError } from '../../errors'
-import { EmailValidator, AddAccount, AddAccountModel, AccountModel, HttpRequest, Validation, Authentication } from './signup-controller-protocols'
-import { ok, serverError, badRequest, forbidden } from '../../helpers/http/http-helper'
+import { EmailInUseError, ServerError } from '../../../errors'
+import { AddAccount, AddAccountModel, AccountModel, HttpRequest, Validation, Authentication } from './signup-controller-protocols'
+import { ok, serverError, badRequest, forbidden } from '../../../helpers/http/http-helper'
 import { AuthenticationModel } from '../login/login-controller-protocols'
 
 interface SutTypes {
   sut: SignUpController
-  emailValidatorStub: EmailValidator
   addAccountStub: AddAccount
   validationStub: Validation
   authenticationStub: Authentication
 }
 
 const makeSut = (): SutTypes => {
-  const emailValidatorStub = makeEmailValidator()
   const addAccountStub = makeAddAccount()
   const validationStub = makeValidation()
   const authenticationStub = makeAuthentication()
   const sut = new SignUpController(validationStub, addAccountStub, authenticationStub)
   return {
     sut,
-    emailValidatorStub,
     addAccountStub,
     validationStub,
     authenticationStub
   }
-}
-
-const makeEmailValidator = (): EmailValidator => {
-  class EmailValidatorStub implements EmailValidator {
-    isValid (email: string): boolean {
-      return true
-    }
-  }
-  return new EmailValidatorStub()
 }
 
 const makeAddAccount = (): AddAccount => {
