@@ -42,4 +42,10 @@ describe('Survey MongoDb Repository', () => {
     const survey = await surveyCollection.findOne({ question: addSurvey.question })
     expect(survey).toBeTruthy()
   })
+
+  test('Should not return on success', async () => {
+    const sut = makeSut()
+    const response = await sut.add(makeFakeAddSurvey())
+    expect(response).toBeFalsy()
+  })
 })
