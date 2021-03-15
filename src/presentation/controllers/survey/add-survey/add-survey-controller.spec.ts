@@ -1,7 +1,5 @@
 import { AddSurveyController } from './add-survey-controller'
-import { Validation } from '../../../protocols/validation'
-import { badRequest } from '../../../helpers/http/http-helper'
-import { HttpRequest } from '../../../protocols'
+import { Validation, badRequest, HttpRequest } from './add-survey-controller-protocols'
 
 interface SutTypes {
   sut: AddSurveyController
@@ -30,7 +28,10 @@ const makeFakeRequest = (): HttpRequest => {
   return {
     body: {
       question: 'any_question',
-      answers: ['1_anwser', '2_anwser', '2_anwser']
+      answers: [{
+        image: 'any_image',
+        answer: 'any_answer'
+      }]
     }
   }
 }
