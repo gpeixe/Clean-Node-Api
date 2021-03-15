@@ -1,5 +1,5 @@
 import { EmailValidation } from './email-validation'
-import { EmailValidator } from '../../presentation/protocols'
+import { EmailValidator } from '../protocols/email-validator'
 import { InvalidParamError } from '../../presentation/errors'
 
 const makeSut = (): SutTypes => {
