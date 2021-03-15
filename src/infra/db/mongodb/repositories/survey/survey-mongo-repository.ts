@@ -9,8 +9,6 @@ export class SurveyMongoRepository implements AddSurveyRepository {
 
   async add (surveyData: AddSurveyModel): Promise<void> {
     const surveyCollection = await this.getSurveyCollection()
-    const result = await surveyCollection.insertOne(surveyData)
-    const survey = result.ops[0]
-    return MongoHelper.map(survey)
+    await surveyCollection.insertOne(surveyData)
   }
 }
