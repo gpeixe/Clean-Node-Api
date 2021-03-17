@@ -3,6 +3,7 @@ import { forbidden } from '../helpers/http/http-helper'
 import { AuthMiddleware } from './auth-middleware'
 import { LoadAccountByToken } from '../../domain/usecases/load-account-by-token'
 import { AccountModel } from '../../domain/models/account'
+import { HttpRequest } from '../protocols'
 
 interface SutTypes {
   sut: AuthMiddleware
@@ -33,6 +34,14 @@ const makeLoadAccountByToken = (): LoadAccountByToken => {
   return new LoadAccountByTokenStub()
 }
 
+const makeFakeRequest = (): HttpRequest => {
+  return {
+    headers: {
+      'x-access-token': 'any_token'
+    }
+  }
+}
+
 describe('Auth Middleware', () => {
   test('Should return 403 if no x-access-token exists in headers', async () => {
     const { sut } = makeSut()
@@ -43,11 +52,8 @@ describe('Auth Middleware', () => {
   test('Should call LoadAccountByToken with correct accessToken', async () => {
     const { sut, loadAccountByTokenStub } = makeSut()
     const loadSpy = jest.spyOn(loadAccountByTokenStub, 'loadByToken')
-    await sut.handle({
-      headers: {
-        'x-access-token': 'any_token'
-      }
-    })
-    expect(loadSpy).toHaveBeenCalledWith('any_token')
+    const httpRequest = makeFakeRequest()
+    await sut.handle(httpRequest)
+    expect(loadSpy).toHaveBeenCalledWith(httpRequest.headers['x-access-token'])
   })
 })
