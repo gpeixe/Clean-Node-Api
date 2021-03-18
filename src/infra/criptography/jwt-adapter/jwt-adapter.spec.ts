@@ -6,7 +6,7 @@ jest.mock('jsonwebtoken', () => ({
     return await new Promise(resolve => resolve('any_token'))
   },
   async verify (): Promise<string> {
-    return await new Promise(resolve => resolve('any_token'))
+    return await new Promise(resolve => resolve('any_value'))
   }
 }))
 
@@ -45,6 +45,12 @@ describe('JwtAdapter', () => {
       const veriifySpy = jest.spyOn(jwt, 'verify')
       await sut.decrypt('any_token')
       expect(veriifySpy).toHaveBeenCalledWith('any_token', 'secret')
+    })
+
+    test('Should return a value on verify success', async () => {
+      const sut = makeSut()
+      const value = await sut.decrypt('any_token')
+      expect(value).toBe('any_value')
     })
   })
 })
