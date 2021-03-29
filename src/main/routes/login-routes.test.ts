@@ -3,11 +3,12 @@ import app from '../config/app'
 import { MongoHelper } from '../../infra/db/mongodb/helpers/mongo-helper'
 import { Collection } from 'mongodb'
 import { hash } from 'bcrypt'
+import env from '../config/env'
 
 let accountCollection: Collection
 
 beforeAll(async () => {
-  await MongoHelper.connect(process.env.MONGO_URL)
+  await MongoHelper.connect(env.mongoUrl)
 })
 
 beforeEach(async () => {
