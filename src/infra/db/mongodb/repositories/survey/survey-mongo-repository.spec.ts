@@ -2,6 +2,7 @@ import { Collection } from 'mongodb'
 import { MongoHelper } from '../../helpers/mongo-helper'
 import { SurveyMongoRepository } from './survey-mongo-repository'
 import { AddSurveyModel } from '../../../../../data/usecases/add-survey/db-add-survey-protocols'
+import env from '../../../../../main/config/env'
 
 let surveyCollection: Collection
 
@@ -24,7 +25,7 @@ const makeSut = (): SurveyMongoRepository => {
 
 describe('Survey MongoDb Repository', () => {
   beforeAll(async () => {
-    await MongoHelper.connect(process.env.MONGO_URL)
+    await MongoHelper.connect(env.mongoUrl)
   })
 
   beforeEach(async () => {

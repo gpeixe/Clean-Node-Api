@@ -2,6 +2,7 @@ import { Collection } from 'mongodb'
 import { AddAccountModel } from '../../../../../domain/usecases/add-account'
 import { MongoHelper } from '../../helpers/mongo-helper'
 import { AccountMongoRepository } from './account-mongo-repository'
+import env from '../../../../../main/config/env'
 
 let accountCollection: Collection
 
@@ -15,7 +16,7 @@ const makeAddAccount = (): AddAccountModel => {
 
 describe('Account MongoDb Repository', () => {
   beforeAll(async () => {
-    await MongoHelper.connect(process.env.MONGO_URL)
+    await MongoHelper.connect(env.mongoUrl)
   })
 
   beforeEach(async () => {
