@@ -5,4 +5,5 @@ coverage
 globalConfig.json
 .husky
 data
+teste
 !src/data
