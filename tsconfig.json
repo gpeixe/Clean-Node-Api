@@ -12,6 +12,6 @@
       "@/*": ["*"]
     }
   },
-  "include": ["./src", "tests", "./jest.config.ts"],
+  "include": ["src", "tests"],
   "exclude": []
 }
