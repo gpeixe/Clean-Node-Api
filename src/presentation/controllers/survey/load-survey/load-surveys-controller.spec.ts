@@ -1,4 +1,4 @@
-import { serverError } from '@/presentation/helpers/http/http-helper'
+import { serverError, ok } from '@/presentation/helpers/http/http-helper'
 import { LoadSurveysController } from './load-surveys-controller'
 import { SurveyModel, HttpRequest, LoadSurveys } from './load-surveys-controller-protocols'
 
@@ -19,12 +19,25 @@ const makeSut = (): SutTypes => {
 const makeLoadSurveys = (): LoadSurveys => {
   class LoadSurveysStub implements LoadSurveys {
     async load (): Promise<SurveyModel[]> {
-      return await new Promise(resolve => resolve(null))
+      return await new Promise(resolve => resolve(makeSurveys()))
     }
   }
   return new LoadSurveysStub()
 }
 
+const makeSurveys = (): SurveyModel[] => {
+  return [
+    {
+      id: '1',
+      question: 'any_question',
+      answers: [{
+        image: 'any_image',
+        answer: 'any_answer'
+      }],
+      date: new Date()
+    }
+  ]
+}
 const makeFakeRequest = (): HttpRequest => {
   return {
     body: null
@@ -46,5 +59,11 @@ describe('LoadSurveys Controller', () => {
     })
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(serverError(new Error()))
+  })
+
+  test('Should return 200 if on success', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(ok(makeSurveys()))
   })
 })
