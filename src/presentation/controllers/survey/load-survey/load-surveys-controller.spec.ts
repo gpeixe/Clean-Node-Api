@@ -1,6 +1,7 @@
 import { serverError, ok, noContent } from '@/presentation/helpers/http/http-helper'
 import { LoadSurveysController } from './load-surveys-controller'
 import { SurveyModel, HttpRequest, LoadSurveys } from './load-surveys-controller-protocols'
+import MockDate from 'mockdate'
 
 interface SutTypes {
   sut: LoadSurveysController
@@ -45,6 +46,14 @@ const makeFakeRequest = (): HttpRequest => {
 }
 
 describe('LoadSurveys Controller', () => {
+  beforeAll(() => {
+    MockDate.set('2021-1-1')
+  })
+
+  afterAll(() => {
+    MockDate.reset()
+  })
+
   test('Should call LoadSurveys.load', async () => {
     const { sut, loadSurveysStub } = makeSut()
     const loadSurveysSpy = jest.spyOn(loadSurveysStub, 'load')
