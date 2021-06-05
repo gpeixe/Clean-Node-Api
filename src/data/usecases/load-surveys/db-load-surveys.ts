@@ -8,7 +8,7 @@ export class DbLoadSurveys implements LoadSurveys {
   ) {}
 
   async load (): Promise<SurveyModel[]> {
-    await this.loadSurveysRepository.load()
-    return null
+    const surveys = await this.loadSurveysRepository.load()
+    return surveys
   }
 }
