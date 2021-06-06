@@ -37,17 +37,27 @@ describe('Survey MongoDb Repository', () => {
     await MongoHelper.disconnect()
   })
 
-  test('Should create an survey on add success', async () => {
-    const sut = makeSut()
-    const addSurvey = makeFakeAddSurvey()
-    await sut.add(addSurvey)
-    const survey = await surveyCollection.findOne({ question: addSurvey.question })
-    expect(survey).toBeTruthy()
+  describe('add', () => {
+    test('Should create an survey on add success', async () => {
+      const sut = makeSut()
+      const addSurvey = makeFakeAddSurvey()
+      await sut.add(addSurvey)
+      const survey = await surveyCollection.findOne({ question: addSurvey.question })
+      expect(survey).toBeTruthy()
+    })
+    test('Should not return on success', async () => {
+      const sut = makeSut()
+      const response = await sut.add(makeFakeAddSurvey())
+      expect(response).toBeFalsy()
+    })
   })
-
-  test('Should not return on success', async () => {
-    const sut = makeSut()
-    const response = await sut.add(makeFakeAddSurvey())
-    expect(response).toBeFalsy()
+  describe('load', () => {
+    test('Should load all surveys on success', async () => {
+      const sut = makeSut()
+      await surveyCollection.insertMany([makeFakeAddSurvey()])
+      const surveys = await sut.load()
+      expect(surveys.length).toBe(1)
+      expect(surveys[0].question).toBe('any_question')
+    })
   })
 })
