@@ -14,7 +14,7 @@ const makeSut = (): SutTypes => {
   }
 }
 
-interface SutTypes {
+type SutTypes = {
   sut: LoginController
   authenticationStub: Authentication
   validationStub: Validation

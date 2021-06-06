@@ -10,8 +10,7 @@ const makeSut = (): SutTypes => {
     emailValidatorStub
   }
 }
-
-interface SutTypes {
+type SutTypes ={
   sut: EmailValidation
   emailValidatorStub: EmailValidator
 }

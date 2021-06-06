@@ -3,7 +3,7 @@ import { LoadSurveysController } from './load-surveys-controller'
 import { SurveyModel, HttpRequest, LoadSurveys } from './load-surveys-controller-protocols'
 import MockDate from 'mockdate'
 
-interface SutTypes {
+type SutTypes = {
   sut: LoadSurveysController
   loadSurveysStub: LoadSurveys
 }
