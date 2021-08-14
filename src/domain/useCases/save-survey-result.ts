@@ -1,7 +1,7 @@
-import { SurveyModel } from '@/presentation/controllers/survey/load-survey/load-surveys-controller-protocols'
+import { SurveyResultModel } from '../models/survey-result'
 
-export type SaveSurveyResultModel = Omit<SurveyModel, 'id'>
+export type SaveSurveyResultModel = Omit<SurveyResultModel, 'id'>
 
 export interface SaveSurveyResult {
-  save: (data: SaveSurveyResultModel) => Promise<void>
+  save: (survey: SaveSurveyResultModel) => Promise<SurveyResultModel>
 }
