@@ -1,8 +1,9 @@
-import { serverError, ok, noContent } from '@/presentation/helpers/http/http-helper'
+import { serverError, ok, noContent, forbidden } from '@/presentation/helpers/http/http-helper'
 import { LoadSurveyById } from '@/domain/useCases/survey/load-survey-by-id'
 import { SaveSurveyResultController } from './save-survey-result-controller'
 import { SurveyModel } from '@/domain/models/survey'
 import { HttpRequest } from '@/presentation/protocols'
+import { InvalidParamError } from '@/presentation/errors'
 
 type SutTypes = {
   sut: SaveSurveyResultController
@@ -47,11 +48,18 @@ const makeFakeRequest = (): HttpRequest => {
 }
 
 describe('SaveSurveyResult Controller', () => {
-  test('Should chall LoadSurveyById with correct values', async () => {
+  test('Should call LoadSurveyById with correct values', async () => {
     const { sut, loadSurveyById } = makeSut()
     const loadSpy = jest.spyOn(loadSurveyById, 'loadById')
     const httpRequest = makeFakeRequest()
     await sut.handle(httpRequest)
     expect(loadSpy).toHaveBeenCalledWith(httpRequest.pathParameters.id)
+  })
+
+  test('Should return 403 wit LoadSurveyById returns null', async () => {
+    const { sut, loadSurveyById } = makeSut()
+    jest.spyOn(loadSurveyById, 'loadById').mockReturnValueOnce(Promise.resolve(null))
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(forbidden(new InvalidParamError('surveyId')))
   })
 })
