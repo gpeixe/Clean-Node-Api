@@ -1,4 +1,4 @@
-import { AuthenticationModel } from '@/domain/usecases/authentication'
+import { AuthenticationModel } from '@/domain/useCases/account/authentication'
 import { DbAuthentication } from './db-authentication'
 import { LoadAccountByEmailRepository, Authentication, AccountModel, HashComparer, Encrypter, UpdateAccessTokenRepository } from './db-authentication-protocols'
 
