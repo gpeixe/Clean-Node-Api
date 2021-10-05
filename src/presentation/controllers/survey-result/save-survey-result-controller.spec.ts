@@ -125,4 +125,13 @@ describe('SaveSurveyResult Controller', () => {
     const { answer } = httpRequest.body
     expect(saveSpy).toHaveBeenCalledWith({ surveyId, accountId, answer, date: new Date()})
   })
+
+  test('Should return 500 if saveSurveyResult throws', async () => {
+    const { sut, saveSurveyResult } = makeSut()
+    jest.spyOn(saveSurveyResult, 'save').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(serverError(new Error()))
+  })
 })
