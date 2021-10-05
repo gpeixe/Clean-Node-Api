@@ -42,7 +42,7 @@ const makeSurvey = (): SurveyModel => ({
 const makeFakeRequest = (): HttpRequest => {
   return {
     pathParameters: {
-      id: 'any_survey_id'
+      surveyId: 'any_survey_id'
     }
   }
 }
@@ -53,13 +53,22 @@ describe('SaveSurveyResult Controller', () => {
     const loadSpy = jest.spyOn(loadSurveyById, 'loadById')
     const httpRequest = makeFakeRequest()
     await sut.handle(httpRequest)
-    expect(loadSpy).toHaveBeenCalledWith(httpRequest.pathParameters.id)
+    expect(loadSpy).toHaveBeenCalledWith(httpRequest.pathParameters.surveyId)
   })
 
-  test('Should return 403 wit LoadSurveyById returns null', async () => {
+  test('Should return 403 if LoadSurveyById returns null', async () => {
     const { sut, loadSurveyById } = makeSut()
     jest.spyOn(loadSurveyById, 'loadById').mockReturnValueOnce(Promise.resolve(null))
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(forbidden(new InvalidParamError('surveyId')))
+  })
+
+  test('Should return 500 if LoadSurveyById throws', async () => {
+    const { sut, loadSurveyById } = makeSut()
+    jest.spyOn(loadSurveyById, 'loadById').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(serverError(new Error()))
   })
 })
